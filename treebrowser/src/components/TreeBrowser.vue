@@ -1,12 +1,19 @@
 <template>
   <div>
-    <div class="node">
-      <h1>{{node.name}}</h1>
+    <div
+      @click="expanded = !expanded"
+      :style="{'margin-left': `${depth * 20}px`}"
+      class="node"
+    >
+      {{node.name}}
     </div>
+
     <TreeBrowser
+      v-if="expanded"
       v-for="child in node.children"
       :key="child.name"
       :node="child"
+      :depth="depth + 1"
     />
   </div>
 </template>
@@ -15,11 +22,24 @@
 export default {
   name: 'TreeBrowser',
   props: {
-    node: Object
+    node: Object,
+    depth: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      expanded: false
+    }
   }
 }
 </script>
 
-<style>
+<style scoped>
+.node {
+  text-align: left;
+  font-size: 18px;
+}
 
 </style>
