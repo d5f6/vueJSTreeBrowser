@@ -1,17 +1,43 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <TreeBrowser
+      :node="root"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import TreeBrowser from './components/TreeBrowser'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      root: {
+        name: '/',
+        children: [
+          {
+            name: 'music',
+            children: [
+              {
+                name: 'song.mp3'
+              }
+            ]
+          },
+          {
+            name: 'workspace',
+            children: [
+              {
+                name: 'source.js'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
   components: {
-    HelloWorld
+    TreeBrowser
   }
 }
 </script>
