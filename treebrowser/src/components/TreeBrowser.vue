@@ -63,7 +63,7 @@ export default {
       }
     }
   },
-  computed: { // comuted are booleans
+  computed: { // computed are booleans
     hasChildren() {
       return this.node.children
     }
