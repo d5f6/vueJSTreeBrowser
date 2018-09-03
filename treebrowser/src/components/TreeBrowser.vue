@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      @click="expanded = !expanded"
+      @click="nodeClicked"
       :style="{'margin-left': `${depth * 20}px`}"
       class="node"
     >
@@ -10,8 +10,9 @@
       class="type"
     >{{expanded ? '&#9660;' : '&#9658;'}}</span>
 
-    <span v-else>&#9671;</span>
-      {{node.name}}
+    <span class="type" v-else>&#9671;</span>
+      <span
+        :style="getStyle(node)">{{node.name}}</span>
     </div>
 
     <TreeBrowser
@@ -20,11 +21,15 @@
       :key="child.name"
       :node="child"
       :depth="depth + 1"
+      @onClick="(node) => $emit('onClick', node)"
     />
   </div>
 </template>
 
 <script>
+import * as ColorHash from 'color-hash'
+const colorHash = new ColorHash()
+
 export default {
   name: 'TreeBrowser',
   props: {
@@ -39,7 +44,26 @@ export default {
       expanded: false
     }
   },
-  computed: {
+  methods: {
+    nodeClicked() {
+      this.expanded = !this.expanded
+      if (!this.hasChildren) {
+        this.$emit('onClick', this.node)
+      }
+    },
+    getStyle(node) {
+      let color = 'red'
+
+      if (!node.children) {
+        color = colorHash.hex(node.name.split('.')[1])
+      }
+
+      return { 
+        color 
+      }
+    }
+  },
+  computed: { // comuted are booleans
     hasChildren() {
       return this.node.children
     }
@@ -51,6 +75,10 @@ export default {
 .node {
   text-align: left;
   font-size: 18px;
+}
+
+.type {
+  margin-right: 10px;
 }
 
 </style>
